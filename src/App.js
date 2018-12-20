@@ -17,7 +17,6 @@ class App extends Component {
   }
 
   getValue(e){
-    e.preventDefault();
     let val = e.target.value;
     if(val){
       let tempPrev = this.state.prev;
