@@ -13,30 +13,16 @@ class App extends Component {
     };
 
     this.getValue = this.getValue.bind(this);
-    this.translate = this.translate.bind(this);
   }
 
   getValue(e){
     let val = e.target.value;
-    this.setState({digit: val}, this.setPrevious(val));
-  }
-
-  setPrevious(val){
-    let tempPrev = this.state.prev;
-    tempPrev.push(val);
-    this.setState({prev: tempPrev}, this.translate());
-  }
-
-  translate(){
-    let val = this.state.prev;
-    for(var i = 0; i < val.length; i++) {
-      if(isNaN(val[i])) { 
-        val.splice(i, 1);
-        i--;
-      }
-    }
-    if(val.length > 0){
-      const promise = getTranslation(val);
+    if(val){
+      this.setState({digit: val});
+      let tempPrev = this.state.prev;
+      tempPrev.push(val);
+      this.setState({prev: tempPrev});
+      const promise = getTranslation(this.state.prev);
       promise.then((res) => 
         this.setState({ res }));
     }
@@ -52,31 +38,31 @@ class App extends Component {
             </div>
             <div class="keypad">
               <button class="key" value="1" disabled="disabled">
-                1 <p>.,?</p>
+                1 <span>.,?</span>
               </button>
               <button class="key" value="2" onClick={this.getValue}>
-                2 <p>abc</p>
+                2 <span>abc</span>
               </button>
               <button class="key" value="3" onClick={this.getValue}>
-                3 <p>def</p>
+                3 <span>def</span>
               </button>
               <button class="key" value="4" onClick={this.getValue}>
-                4 <p>ghi</p>
+                4 <span>ghi</span>
               </button>
               <button class="key" value="5" onClick={this.getValue}>
-                5 <p>jkl</p>
+                5 <span>jkl</span>
               </button>
               <button class="key" value="6" onClick={this.getValue}>
-                6 <p>mno</p>
+                6 <span>mno</span>
               </button>
               <button class="key" value="7" onClick={this.getValue}>
-                7 <p>pqrs</p>
+                7 <span>pqrs</span>
               </button>
               <button class="key" value="8" onClick={this.getValue}>
-                8 <p>tuv</p>
+                8 <span>tuv</span>
               </button>
               <button class="key" value="9" onClick={this.getValue}>
-                9 <p>wxyz</p>
+                9 <span>wxyz</span>
               </button>
             </div>
           </div>

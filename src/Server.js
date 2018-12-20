@@ -111,14 +111,12 @@ app.get('/translate/:number', function (req, res) {
     if(i % 2 === 0)
      num.push(parseInt(req.params.number[i], 10) - 2);
   }
+  console.log('feeding ' + num);
   let arr = trie.getWords(num);
+  console.log('output: ' + arr);
   let strArr = arr.toString();
 
   if(!strArr){
-    // for(let i = 0; i < req.params.number.length; i++){
-    //   if(i % 2 === 0)
-    //     strArr += map.get(parseInt(req.params.number[i], 10));
-    // }
     strArr = 'no predictions';
   }
 
