@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { getPhoneWord } from './Routes.js';
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   render() {
+    getPhoneWord();
+
     return (
       <div className="App">
         <header className="App-header">
