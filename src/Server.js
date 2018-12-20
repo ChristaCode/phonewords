@@ -64,14 +64,16 @@ Trie.prototype._getWords = function(node, words, word, numbers, level) {
   }
   for(var child in node.children) {
     if(node.children.hasOwnProperty(child)) {
-      if (child == letters[numbers[level]][0] || child == letters[numbers[level]][1] || child == letters[numbers[level]][2]) {
+      if (child == letters[numbers[level]][0] ||
+          child == letters[numbers[level]][1] ||
+          child == letters[numbers[level]][2]) {
       word += child;
-      if (node.children[child].isWord && word.length) {
+      if (node.children[child].isWord && word.length == numbers.length) {
         words.push(word);
       }
-      this._getWords(node.children[child], words, word, numbers, level);
+      this._getWords(node.children[child], words, word, numbers, level + 1);
       word = word.substring(0, word.length - 1);
-     }
+    }
     }
   }
 };
@@ -113,10 +115,11 @@ app.get('/translate/:number', function (req, res) {
   let strArr = arr.toString();
 
   if(!strArr){
-    for(let i = 0; i < req.params.number.length; i++){
-      if(i % 2 === 0)
-        strArr += map.get(parseInt(req.params.number[i], 10));
-    }
+    // for(let i = 0; i < req.params.number.length; i++){
+    //   if(i % 2 === 0)
+    //     strArr += map.get(parseInt(req.params.number[i], 10));
+    // }
+    strArr = 'no predictions';
   }
 
   res.send(strArr);

@@ -17,20 +17,28 @@ class App extends Component {
   }
 
   getValue(e){
-    let val = e.target.value;
-    if(val){
-      let tempPrev = this.state.prev;
-      tempPrev.push(val);
-      this.setState({prev: tempPrev});
-      this.setState({digit: val});
-      this.translate(this.state.prev);
-    }
+    this.setState({digit: e.target.value}, this.setPrevious(e.target.value));
   }
 
-  translate(val){
-    const promise = getTranslation(val);
-    promise.then((res) => 
-      this.setState({ res }));
+  setPrevious(val){
+    let tempPrev = this.state.prev;
+    tempPrev.push(val);
+    this.setState({prev: tempPrev}, this.translate());
+  }
+
+  translate(){
+    let val = this.state.prev;
+    for(var i = 0; i < val.length; i++) {
+      if(isNaN(val[i])) { 
+        val.splice(i, 1);
+        i--;
+      }
+    }
+    if(val.length > 0){
+      const promise = getTranslation(val);
+      promise.then((res) => 
+        this.setState({ res }));
+    }
   }
 
   render() {
