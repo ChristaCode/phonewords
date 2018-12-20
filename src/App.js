@@ -17,7 +17,8 @@ class App extends Component {
   }
 
   getValue(e){
-    this.setState({digit: e.target.value}, this.setPrevious(e.target.value));
+    let val = e.target.value;
+    this.setState({digit: val}, this.setPrevious(val));
   }
 
   setPrevious(val){
