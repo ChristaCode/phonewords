@@ -19,7 +19,8 @@ app.use(cors(corsOptions));
 
 app.get('/translate/:number', function (req, res) {
   console.log(req.params.number);
-  res.send(req.params);
+  // res.send(req.params);
+  res.send('test' + req.params.number);
 })
 
 app.listen(port, () => {
