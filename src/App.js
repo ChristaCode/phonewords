@@ -33,21 +33,10 @@ class App extends Component {
       this.setState({ res }));
   }
 
-  select(){
-
-  }
-
   render() {
-    let response = this.state.response;
-
     return (
       <div className="App">
-
-        <span onclick={this.select}>{this.state.res[0]}</span>
-        <span onclick={this.select}>{this.state.res[2]}</span>
-        <span onclick={this.select}>{this.state.res[4]}</span>
-        <span onclick={this.select}>{this.state.res[6]}</span>
-
+        {this.state.res}
            <div class="phone">
             <div class="screen">
               <span class="prev">{this.state.prev}</span>

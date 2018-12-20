@@ -7,15 +7,15 @@ const app            = express();
 
 const port = 8000;
 
-// let map = new Map();
-// map.set(2, ['A', 'B', 'C']);
-// map.set(3, ['D', 'E', 'F']);
-// map.set(4, ['G', 'H', 'I']);
-// map.set(5, ['J', 'K', 'L']);
-// map.set(6, ['M', 'N', 'O']);
-// map.set(7, ['P', 'Q', 'R', 'S']);
-// map.set(8, ['T', 'U', 'V']);
-// map.set(9, ['W', 'X', 'Y', 'Z']);
+let map = new Map();
+map.set(2, ['A', 'B', 'C']);
+map.set(3, ['D', 'E', 'F']);
+map.set(4, ['G', 'H', 'I']);
+map.set(5, ['J', 'K', 'L']);
+map.set(6, ['M', 'N', 'O']);
+map.set(7, ['P', 'Q', 'R', 'S']);
+map.set(8, ['T', 'U', 'V']);
+map.set(9, ['W', 'X', 'Y', 'Z']);
 
 function Node(data) {
   this.data = data;
@@ -105,17 +105,21 @@ app.use(cors(corsOptions));
 
 app.get('/translate/:number', function (req, res) {
   let num = [];
-  console.log(req.params.number);
   for(let i = 0; i < req.params.number.length; i++){
-    num.push(parseInt(req.params.number[i], 10) - 2);
+    if(i % 2 === 0)
+     num.push(parseInt(req.params.number[i], 10) - 2);
   }
-  // let num = [];
-  // let temp = parseInt(req.params.number, 10) - 2;
-  // num.push(temp);
-  let a = trie.getWords(num);
-  let strArr = a.toString();
+  let arr = trie.getWords(num);
+  let strArr = arr.toString();
+
+  if(!strArr){
+    for(let i = 0; i < req.params.number.length; i++){
+      if(i % 2 === 0)
+        strArr += map.get(parseInt(req.params.number[i], 10));
+    }
+  }
+
   res.send(strArr);
-  // res.send(map.get(num).toString());
 })
 
 app.listen(port, () => {
