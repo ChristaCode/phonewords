@@ -1,18 +1,94 @@
 const express        = require('express');
 var cors             = require('cors')
 const app            = express();
+// const conversion = './Conversion.js';
+// import { getWords } from './Conversion.js';
+
 
 const port = 8000;
 
-let map = new Map();
-map.set(1, ['A', 'B', 'C']);
-map.set(2, ['D', 'E', 'F']);
-map.set(3, ['G', 'H', 'I']);
-map.set(4, ['J', 'K', 'L']);
-map.set(5, ['M', 'N', 'O']);
-map.set(6, ['P', 'Q', 'R', 'S']);
-map.set(7, ['T', 'U', 'V']);
-map.set(8, ['W', 'X', 'Y', 'Z']);
+// let map = new Map();
+// map.set(2, ['A', 'B', 'C']);
+// map.set(3, ['D', 'E', 'F']);
+// map.set(4, ['G', 'H', 'I']);
+// map.set(5, ['J', 'K', 'L']);
+// map.set(6, ['M', 'N', 'O']);
+// map.set(7, ['P', 'Q', 'R', 'S']);
+// map.set(8, ['T', 'U', 'V']);
+// map.set(9, ['W', 'X', 'Y', 'Z']);
+
+function Node(data) {
+  this.data = data;
+  this.isWord = false;
+  this.prefixes = 0;
+  this.children = {};
+}
+
+function Trie() {
+  this.root = new Node('');
+}
+
+Trie.prototype.add = function(word) {
+  if(!this.root) {
+    return null;
+  }
+  this._addNode(this.root, word);
+};
+Trie.prototype._addNode = function(node, word) {
+  if(!node || !word) {
+    return null;
+  }
+  node.prefixes++;
+  var letter = word.charAt(0);
+  var child = node.children[letter];
+  if(!child) {
+    child = new Node(letter);
+    node.children[letter] = child;
+  }
+  var remainder = word.substring(1);
+  if(!remainder) {
+    child.isWord = true;
+  }
+  this._addNode(child, remainder);
+};
+
+Trie.prototype.getWords = function(numbers) {
+  var words = [];
+  var word = '';
+  this._getWords(this.root, words, word, numbers, 0);
+  return words;
+};
+Trie.prototype._getWords = function(node, words, word, numbers, level) {
+  if (level >= numbers.length) {
+    return;
+  }
+  for(var child in node.children) {
+    if(node.children.hasOwnProperty(child)) {
+      if (child == letters[numbers[level]][0] || child == letters[numbers[level]][1] || child == letters[numbers[level]][2]) {
+      word += child;
+      if (node.children[child].isWord && word.length) {
+        words.push(word);
+      }
+      this._getWords(node.children[child], words, word, numbers, level);
+      word = word.substring(0, word.length - 1);
+     }
+    }
+  }
+};
+
+  var letters = [['a','b','c'],['d','e','f'],['g','h','i'],['j','k','l'],['m','n','o'],['p','r','s']
+  ,['t','u','v'],['w','x','y','z']];
+
+  const fs = require('fs');
+
+  var trie = new Trie();
+  let txtFile = "1000.txt";
+  let str = fs.readFileSync(txtFile,'utf8');
+  str = str.toLowerCase()
+  var words = str.split('\n');
+  for (var i = 0; i < 1000; i++) {
+    trie.add(words[i]);
+  }
 
 var whitelist = ['http://localhost:3000']; //whitelisted for dev purposes
 var corsOptions = {
@@ -28,9 +104,18 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 app.get('/translate/:number', function (req, res) {
-  let num = req.params.number;
-  num = parseInt(num, 10);
-  res.send(map.get(num).toString());
+  let num = [];
+  console.log(req.params.number);
+  for(let i = 0; i < req.params.number.length; i++){
+    num.push(parseInt(req.params.number[i], 10) - 2);
+  }
+  // let num = [];
+  // let temp = parseInt(req.params.number, 10) - 2;
+  // num.push(temp);
+  let a = trie.getWords(num);
+  let strArr = a.toString();
+  res.send(strArr);
+  // res.send(map.get(num).toString());
 })
 
 app.listen(port, () => {
